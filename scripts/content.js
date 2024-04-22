@@ -1,5 +1,11 @@
+if(localStorage.getItem("shortsRemove") == "true"){
+    var shortsRemove = true;
+}
+else{
+    var shortsRemove = false;
+}
+
 function removeShorts() {
-    var shortsRemove = !!(localStorage.getItem("shortsRemove"));
     if(shortsRemove == true){
         var shorts = document.querySelectorAll('ytd-rich-section-renderer');
     
@@ -13,7 +19,6 @@ function removeShorts() {
 }
 
 function removeShortsButton() {
-    var shortsRemove = !!(localStorage.getItem("shortsRemove"));
     if(shortsRemove == true){
         var shortsbtns = document.querySelectorAll('ytd-mini-guide-entry-renderer');
         var shortsbtns2 = document.querySelectorAll('ytd-guide-entry-renderer');
@@ -63,7 +68,7 @@ function createSettings() {
 
     var settingsLabel = document.createElement("label");
     settingsLabel.classList.add("settings-shorts-header");
-    settingsLabel.innerHTML = !!(localStorage.getItem("shortsRemove"));
+    settingsLabel.innerHTML = "Remove YT shorts";
     settingsLabel.setAttribute("for", "shorts");
 
     settingsForm.append(settingsLabel);
@@ -74,7 +79,7 @@ function createSettings() {
 
     settingsForm.append(settingsInput);
 
-    settingsInput.checked = !!(localStorage.getItem("shortsRemove"));
+    settingsInput.checked = shortsRemove;
 
     settingsInput.addEventListener('click', () => {
         if(settingsInput.checked == true){
