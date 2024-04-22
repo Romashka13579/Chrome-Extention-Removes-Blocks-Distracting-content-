@@ -12,33 +12,25 @@ function removeShorts() {
         shorts.forEach(short => {
             short.remove();
         });
+
+        var shortsbtns = document.querySelectorAll('ytd-mini-guide-entry-renderer');
+        var shortsbtns2 = document.querySelectorAll('ytd-guide-entry-renderer');
+    
+        if(shortsbtns.length == 5){
+            shortsbtns[1].remove();
+        }
+    
+        if(shortsbtns2.length == 18){
+            shortsbtns2[1].remove();
+        }
+        console.log(shortsbtns.length);
     }
     setInterval(() => {
         removeShorts();
     }, 300);
 }
 
-function removeShortsButton() {
-    if(shortsRemove == true){
-        var shortsbtns = document.querySelectorAll('ytd-mini-guide-entry-renderer');
-        var shortsbtns2 = document.querySelectorAll('ytd-guide-entry-renderer');
-    
-        if(shortsbtns[1]){
-            shortsbtns[1].remove();
-        }
-    
-        if(shortsbtns2[1]){
-            shortsbtns2[1].remove();
-        }
-        return 0;
-    }
-    setInterval(() => {
-        removeShortsButton();
-    }, 300);
-}
-
 window.onload = removeShorts();
-window.onload = removeShortsButton();
 window.onload = createSettings();
 
 function createSettings() {
