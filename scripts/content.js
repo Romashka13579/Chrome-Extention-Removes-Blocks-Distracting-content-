@@ -15,19 +15,31 @@ function removeShorts() {
 
         var shortsbtns = document.querySelectorAll('ytd-mini-guide-entry-renderer');
         var shortsbtns2 = document.querySelectorAll('ytd-guide-entry-renderer');
-    
-        if(shortsbtns.length == 5){
-            shortsbtns[1].remove();
-        }
-    
-        if(shortsbtns2.length == 18){
-            shortsbtns2[1].remove();
-        }
-        console.log(shortsbtns.length);
+
+        btnsCheck(shortsbtns);
+        btnsCheck(shortsbtns2);
+
+        checkURL();
     }
-    setInterval(() => {
-        removeShorts();
-    }, 300);
+    console.log(window.location.href);
+}
+
+function btnsCheck(btns) {
+    btns.forEach(btn => {
+        var a = btn.querySelector("a");
+        if(a.title == "YouTube Shorts"){
+            btn.remove();
+            return;
+        }
+    });
+}
+
+function checkURL() {
+    if(window.location.href == "https://www.youtube.com/"){
+        setTimeout(() => {
+            removeShorts();
+        }, 1000);
+    }
 }
 
 window.onload = removeShorts();
