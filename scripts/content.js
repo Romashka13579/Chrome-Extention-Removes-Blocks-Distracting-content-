@@ -5,7 +5,25 @@ else{
     var shortsRemove = false;
 }
 
+if(localStorage.getItem("videosRemove") == "true"){
+    var videosRemove = true;
+}
+else{
+    var videosRemove = false;
+}
+
+
+
 function removeShorts() {
+    if(videosRemove == true){
+        var videos = document.querySelectorAll('ytd-two-column-browse-results-renderer');
+        if(videos){
+            videos.forEach(video => {
+                video.remove();
+            });
+        }
+    }
+
     if(shortsRemove == true){
         var shorts = document.querySelectorAll('ytd-rich-section-renderer');
     
@@ -19,9 +37,8 @@ function removeShorts() {
         btnsCheck(shortsbtns);
         btnsCheck(shortsbtns2);
 
-        checkURL();
+        console.log("checkURL");
     }
-    console.log(window.location.href);
 }
 
 function btnsCheck(btns) {
@@ -42,8 +59,30 @@ function checkURL() {
     }
 }
 
+
 window.onload = removeShorts();
 window.onload = createSettings();
+addEventListener('scroll', () => {
+    removeShorts();
+});
+addEventListener('keydown', (e) => {
+    if(e.key == "Alt"){
+        if(localStorage.getItem("appActivate") == null){
+            localStorage.setItem("appActivate", false);
+        }
+        if(localStorage.getItem("appActivate") == "true"){
+            var settings = document.querySelector('.settings-over');
+            settings.style.display = "block";
+            localStorage.setItem("appActivate", false);
+        }
+        else{
+            var settings = document.querySelector('.settings-over');
+            settings.style.display = "none";
+            localStorage.setItem("appActivate", true);
+        }
+    }
+});
+
 
 function createSettings() {
     var settingsOver = document.createElement("div");
@@ -52,6 +91,17 @@ function createSettings() {
     var body = document.querySelector("ytd-app");
     
     body.prepend(settingsOver);
+    if(localStorage.getItem("appActivate") == null){
+        localStorage.setItem("appActivate", false);
+    }
+    if(localStorage.getItem("appActivate") == "false"){
+        var settings = document.querySelector('.settings-over');
+        settings.style.display = "block";
+    }
+    else{
+        var settings = document.querySelector('.settings-over');
+        settings.style.display = "none";
+    }
 
     var settings = document.createElement("div");
     settings.classList.add("settings");
@@ -93,5 +143,26 @@ function createSettings() {
             localStorage.setItem("shortsRemove", false);
         }
     });
-}
 
+    var settingsFormClone = settingsForm.cloneNode(true);
+    settings.append(settingsFormClone);
+
+    var settingsLabelClone = settingsFormClone.querySelector('.settings-shorts-header');
+    settingsLabelClone.innerHTML = "Remove videos";
+    settingsLabelClone.setAttribute("for", "videos");
+
+    var settingsInputClone = settingsFormClone.querySelector('.settings-shorts-input');
+    settingsInputClone.name = "videos";
+
+
+    settingsInputClone.checked = videosRemove;
+
+    settingsInputClone.addEventListener('click', () => {
+        if(settingsInputClone.checked == true){
+            localStorage.setItem("videosRemove", true);
+        }
+        else{
+            localStorage.setItem("videosRemove", false);
+        }
+    });
+}
