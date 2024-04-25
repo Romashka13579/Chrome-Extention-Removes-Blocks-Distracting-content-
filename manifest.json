@@ -16,5 +16,9 @@
       "css":["style.css"],
       "js": ["scripts/content.js"]
     }
-  ]
+  ],
+  "web_accessible_resources": [{
+    "resources": ["extension.html"],
+    "matches": ["*://*.youtube.com/*"]
+  }]
 }
