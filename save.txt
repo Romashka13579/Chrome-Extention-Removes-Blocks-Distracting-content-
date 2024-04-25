@@ -193,3 +193,201 @@ function functionCall() {
 }
 
 window.onload = functionCall();
+
+
+
+
+
+
+
+
+
+
+
+
+
+if(localStorage.getItem("shortsRemove") == "true"){
+    var shortsRemove = true;
+}
+else{
+    var shortsRemove = false;
+}
+
+if(localStorage.getItem("videosRemove") == "true"){
+    var videosRemove = true;
+}
+else{
+    var videosRemove = false;
+}
+
+
+
+function removeShorts() {
+    if(videosRemove == true){
+        var videos = document.querySelectorAll('ytd-two-column-browse-results-renderer');
+        if(videos){
+            videos.forEach(video => {
+                video.remove();
+            });
+        }
+    }
+
+    if(shortsRemove == true){
+        var shorts = document.querySelectorAll('ytd-rich-section-renderer');
+    
+        shorts.forEach(short => {
+            short.remove();
+        });
+
+        var shortsbtns = document.querySelectorAll('ytd-mini-guide-entry-renderer');
+        var shortsbtns2 = document.querySelectorAll('ytd-guide-entry-renderer');
+
+        btnsCheck(shortsbtns);
+        btnsCheck(shortsbtns2);
+
+        console.log("checkURL");
+    }
+}
+
+function btnsCheck(btns) {
+    btns.forEach(btn => {
+        var a = btn.querySelector("a");
+        if(a.title == "YouTube Shorts"){
+            btn.remove();
+            return;
+        }
+    });
+}
+
+function checkURL() {
+    if(window.location.href == "https://www.youtube.com/"){
+        setTimeout(() => {
+            removeShorts();
+        }, 1000);
+    }
+}
+
+
+window.onload = removeShorts();
+window.onload = createSettings();
+addEventListener('scroll', () => {
+    removeShorts();
+});
+addEventListener('keydown', (e) => {
+    if(e.key == "Alt"){
+        if(localStorage.getItem("appActivate") == null){
+            localStorage.setItem("appActivate", false);
+        }
+        if(localStorage.getItem("appActivate") == "true"){
+            var settings = document.querySelector('.settings-over');
+            settings.style.display = "block";
+            localStorage.setItem("appActivate", false);
+        }
+        else{
+            var settings = document.querySelector('.settings-over');
+            settings.style.display = "none";
+            localStorage.setItem("appActivate", true);
+        }
+    }
+});
+
+
+function createSettings() {
+    const iframe = document.createElement('iframe');
+    iframe.style.zIndex = 1000;
+    iframe.style.translateZ = "1000px";
+    iframe.style.position = "fixed";
+    iframe.style.width = "100vw";
+    iframe.style.height = "100vh";
+    iframe.src = chrome.runtime.getURL('extension.html');
+    document.body.prepend(iframe);
+    
+    console.log("a");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.settings-over{
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    overflow:hidden;
+    bottom: 25px;
+    right: 25px;
+    border-radius: 25px;
+    z-index: 100;
+    transform: translateZ(10px);
+    box-shadow: 3px 3px 8px 1px rgba(20, 20, 20, 0.522);
+    transition: 400ms;
+}
+
+.settings{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-direction: column;
+    background: rgb(250, 250, 250);
+    padding: 50px 50px 20px 20px;
+    box-sizing: border-box;
+    transition: 400ms;
+    width: 140px;
+    height: 140px;
+}
+
+.settings-header{
+    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+}
+
+.settings-over:hover{
+    width: 140px;
+    height: 140px;
+    border-radius: 10px;
+}
+
+.settings-over:hover .settings{
+    padding: 10px 12px;
+    transition: 100ms;
+}
+
+.settings-shorts-form{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-shorts-header{
+    font-size: 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 300;
+}
+
+.settings-shorts-input{
+    border-radius: 0px;
+    border: 1px solid black;
+}
+
+.tester{
+    position: fixed;
+    top: 50px;
+    left: 50px;
+    background-color: aqua;
+    width: 100px;
+    height: 100px;
+}

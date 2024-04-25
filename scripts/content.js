@@ -72,7 +72,7 @@ addEventListener('keydown', (e) => {
         }
         if(localStorage.getItem("appActivate") == "true"){
             var settings = document.querySelector('.settings-over');
-            settings.style.display = "block";
+            settings.style.display = "flex";
             localStorage.setItem("appActivate", false);
         }
         else{
@@ -85,14 +85,87 @@ addEventListener('keydown', (e) => {
 
 
 function createSettings() {
-    const iframe = document.createElement('iframe');
-    iframe.style.zIndex = 1000;
-    iframe.style.translateZ = "1000px";
-    iframe.style.position = "fixed";
-    iframe.style.width = "100vw";
-    iframe.style.height = "100vh";
-    iframe.src = chrome.runtime.getURL('extension.html');
-    document.body.prepend(iframe);
+    var settingsOver = document.createElement("div");
+    settingsOver.classList.add("settings-over");
     
-    console.log("a");
+    var body = document.querySelector("ytd-app");
+    
+    body.prepend(settingsOver);
+    if(localStorage.getItem("appActivate") == null){
+        localStorage.setItem("appActivate", false);
+    }
+    if(localStorage.getItem("appActivate") == "false"){
+        var settings = document.querySelector('.settings-over');
+        settings.style.display = "flex";
+    }
+    else{
+        var settings = document.querySelector('.settings-over');
+        settings.style.display = "none";
+    }
+
+    var settings = document.createElement("div");
+    settings.classList.add("settings");
+    
+    settingsOver.append(settings);
+
+    var settingsHeader = document.createElement("div");
+    settingsHeader.classList.add("settings-header");
+    settingsHeader.innerHTML = "Remover";
+
+    settings.append(settingsHeader);
+
+    var settingsMain = document.createElement("div");
+    settingsMain.classList.add("settings-main");
+
+    settings.append(settingsMain);
+
+
+
+    var settingsForm = document.createElement("form");
+    settingsForm.classList.add("settings-shorts-form");
+    settingsMain.append(settingsForm);
+
+    var settingsLabel = document.createElement("label");
+    settingsLabel.classList.add("settings-shorts-header");
+    settingsLabel.setAttribute("for", "shorts");
+
+    settingsForm.append(settingsLabel);
+    var settingsInput = document.createElement("input");
+    settingsInput.classList.add("settings-shorts-input");
+    settingsInput.type = "checkbox";
+    settingsInput.name = "shorts";
+
+    settingsForm.append(settingsInput);
+
+    settingsInput.checked = shortsRemove;
+
+    settingsInput.addEventListener('click', () => {
+        if(settingsInput.checked == true){
+            localStorage.setItem("shortsRemove", true);
+        }
+        else{
+            localStorage.setItem("shortsRemove", false);
+        }
+    });
+
+    var settingsFormClone = settingsForm.cloneNode(true);
+    settingsMain.append(settingsFormClone);
+
+    var settingsLabelClone = settingsFormClone.querySelector('.settings-shorts-header');
+    settingsLabelClone.setAttribute("for", "videos");
+
+    var settingsInputClone = settingsFormClone.querySelector('.settings-shorts-input');
+    settingsInputClone.name = "videos";
+
+
+    settingsInputClone.checked = videosRemove;
+
+    settingsInputClone.addEventListener('click', () => {
+        if(settingsInputClone.checked == true){
+            localStorage.setItem("videosRemove", true);
+        }
+        else{
+            localStorage.setItem("videosRemove", false);
+        }
+    });
 }
