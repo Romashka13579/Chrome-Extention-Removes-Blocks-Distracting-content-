@@ -15,15 +15,6 @@ else{
 
 
 function removeShorts() {
-    if(videosRemove == true){
-        var videos = document.querySelectorAll('ytd-two-column-browse-results-renderer');
-        if(videos){
-            videos.forEach(video => {
-                video.remove();
-            });
-        }
-    }
-
     if(shortsRemove == true){
         var shorts = document.querySelectorAll('ytd-rich-section-renderer');
     
@@ -39,6 +30,22 @@ function removeShorts() {
 
         console.log("checkURL");
     }
+    if(videosRemove == true){
+        var videos = document.querySelectorAll('ytd-two-column-browse-results-renderer');
+        arrayRemover(videos);
+        var secondary = document.getElementById("secondary");
+        if(secondary){
+            secondary.remove();
+        }
+    }
+}
+
+function arrayRemover(array){
+    if(array[0]){
+        array.forEach(element => {
+            element.remove();
+        });
+    }
 }
 
 function btnsCheck(btns) {
@@ -51,16 +58,14 @@ function btnsCheck(btns) {
     });
 }
 
-function checkURL() {
-    if(window.location.href == "https://www.youtube.com/"){
-        setTimeout(() => {
-            removeShorts();
-        }, 1000);
-    }
+function removeShortsDelayed() {
+    setTimeout(() => {
+        removeShorts();
+    }, 400);
 }
 
-
 window.onload = removeShorts();
+window.onload = removeShortsDelayed();
 window.onload = createSettings();
 addEventListener('scroll', () => {
     removeShorts();
@@ -90,6 +95,22 @@ function createSettings() {
     
     var body = document.querySelector("ytd-app");
     
+    settingsOver.innerHTML += `
+        <div class="settings">
+            <div class="settings-header">Remover</div>
+            <div class="settings-main">
+                <div class="settings-shorts-form">
+                    <label for="shorts"><i class="fa-brands fa-youtube"></i></label>
+                    <input name="shorts" type="checkbox"  class="settings-shorts-input">
+                </div>
+                <div class="settings-shorts-form">
+                    <label for="videos"><i class="fa-solid fa-video"></i></label>
+                    <input name="videos" type="checkbox" class="settings-videos-input">
+                </div>
+            </div>
+        </div>
+    `;
+
     body.prepend(settingsOver);
     if(localStorage.getItem("appActivate") == null){
         localStorage.setItem("appActivate", false);
@@ -103,44 +124,12 @@ function createSettings() {
         settings.style.display = "none";
     }
 
-    var settings = document.createElement("div");
-    settings.classList.add("settings");
-    
-    settingsOver.append(settings);
+    var shortsInput = document.querySelector('.settings-shorts-input');
 
-    var settingsHeader = document.createElement("div");
-    settingsHeader.classList.add("settings-header");
-    settingsHeader.innerHTML = "Remover";
+    shortsInput.checked = shortsRemove;
 
-    settings.append(settingsHeader);
-
-    var settingsMain = document.createElement("div");
-    settingsMain.classList.add("settings-main");
-
-    settings.append(settingsMain);
-
-
-
-    var settingsForm = document.createElement("form");
-    settingsForm.classList.add("settings-shorts-form");
-    settingsMain.append(settingsForm);
-
-    var settingsLabel = document.createElement("label");
-    settingsLabel.classList.add("settings-shorts-header");
-    settingsLabel.setAttribute("for", "shorts");
-
-    settingsForm.append(settingsLabel);
-    var settingsInput = document.createElement("input");
-    settingsInput.classList.add("settings-shorts-input");
-    settingsInput.type = "checkbox";
-    settingsInput.name = "shorts";
-
-    settingsForm.append(settingsInput);
-
-    settingsInput.checked = shortsRemove;
-
-    settingsInput.addEventListener('click', () => {
-        if(settingsInput.checked == true){
+    shortsInput.addEventListener('click', () => {
+        if(shortsInput.checked == true){
             localStorage.setItem("shortsRemove", true);
         }
         else{
@@ -148,20 +137,12 @@ function createSettings() {
         }
     });
 
-    var settingsFormClone = settingsForm.cloneNode(true);
-    settingsMain.append(settingsFormClone);
+    var videosInput = document.querySelector('.settings-videos-input');
 
-    var settingsLabelClone = settingsFormClone.querySelector('.settings-shorts-header');
-    settingsLabelClone.setAttribute("for", "videos");
+    videosInput.checked = videosRemove;
 
-    var settingsInputClone = settingsFormClone.querySelector('.settings-shorts-input');
-    settingsInputClone.name = "videos";
-
-
-    settingsInputClone.checked = videosRemove;
-
-    settingsInputClone.addEventListener('click', () => {
-        if(settingsInputClone.checked == true){
+    videosInput.addEventListener('click', () => {
+        if(videosInput.checked == true){
             localStorage.setItem("videosRemove", true);
         }
         else{
