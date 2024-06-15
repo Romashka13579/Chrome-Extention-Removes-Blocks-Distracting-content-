@@ -31,12 +31,8 @@ function removeShorts() {
         console.log("checkURL");
     }
     if(videosRemove == true){
-        var videos = document.querySelectorAll('ytd-two-column-browse-results-renderer');
+        var videos = document.querySelectorAll('.style-scope.ytd-rich-grid-renderer');
         arrayRemover(videos);
-        var secondary = document.getElementById("secondary");
-        if(secondary){
-            secondary.remove();
-        }
     }
 }
 
@@ -67,6 +63,7 @@ function removeShortsDelayed() {
 window.onload = removeShorts();
 window.onload = removeShortsDelayed();
 window.onload = createSettings();
+
 addEventListener('scroll', () => {
     removeShorts();
 });
